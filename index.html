@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Brawl Game</title>
+    <style>
+        body { text-align: center; background: #111; color: white; font-family: Arial; }
+        canvas { background: #333; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>2D Brawl Game</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let player = { x: 400, y: 300, size: 20, speed: 5 };
+        let keys = {};
+
+        window.addEventListener("keydown", (e) => keys[e.key.toLowerCase()] = true);
+        window.addEventListener("keyup", (e) => keys[e.key.toLowerCase()] = false);
+
+        function update() {
+            if (keys["w"] || keys["arrowup"]) player.y -= player.speed;
+            if (keys["s"] || keys["arrowdown"]) player.y += player.speed;
+            if (keys["a"] || keys["arrowleft"]) player.x -= player.speed;
+            if (keys["d"] || keys["arrowright"]) player.x += player.speed;
+
+            player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
